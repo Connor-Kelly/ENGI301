@@ -54,6 +54,7 @@ Error conditions:
 
 # NOTE - Add import statements to allow access to Python library functions
 # NOTE - Hint:  Look at  https://docs.python.org/3/library/operator.html
+import operator
 
 # ------------------------------------------------------------------------
 # Constants
@@ -68,8 +69,14 @@ Error conditions:
 # NOTE - Global variable to map an operator string (e.g. "+") to 
 # NOTE - the appropriate function.
 operators = {
-    # Dictionary syntax:  "key" : "value"
-    #   i.e. "function" : operator.<function>
+    "+" : operator.add,
+    "-" : operator.sub,
+    "*" : operator.mul,
+    "/" : operator.truediv,
+    ">>" : operator.lshift,
+    "<<" : operator.lshift,
+    "%" : operator.mod,
+    "**" : operator.pow
 }
 
 
@@ -85,15 +92,19 @@ def get_user_input():
     """
     # NOTE - Use "try"/"except" statements to allow code to handle errors gracefully.      
     try:
-        # NOTE - Use "pass" statements to allow code to be run without having to 
-        # NOTE - fill out the contents.  This pass statement should be removed    
-        pass
-        
-        # NOTE - User input is generally returned as a string and must be translated.
+        number1 = float(input("Enter first number : "))
+        number2 = float(input("Enter second number: "))
+        op      = input("Enter function (valid values are +, -, *, /, >>, <<, %, or **): ")
+    
+        func    = operators.get(op)
+        if (func == operator.lshift or func == operator.rshift):
+            number1 = int(number1)
+            number2 = int(number2)
     except:
         print("Invalid Input")
         return (None, None, None)
 
+    return (number1, number2, func)
 # End def
 
 
@@ -121,5 +132,12 @@ if __name__ == "__main__":
 
     # NOTE - Use "pass" statements to allow code to be run without having to 
     # NOTE - fill out the contents.  This pass statement should be removed    
-    pass
+    while True:
+        (num1, num2, func) = get_user_input()
+        
+        if (num1 == None) or (num2 == None) or (func == None):
+            print("Invalid input")
+            break
+        
+        print(func(num1, num2))
 

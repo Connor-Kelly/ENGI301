@@ -6,9 +6,9 @@ GPIO.setup("USR3", GPIO.OUT)
 
 while True:
     # for i in range(4):
-    GPIO.output("USR%d" % i, GPIO.HIGH)
+    GPIO.output("USR3", GPIO.HIGH)
     time.sleep(1/10)
 
     # for i in range(4):
-    GPIO.output("USR%d" % i, GPIO.LOW)
+    GPIO.output("USR3", GPIO.LOW)
     time.sleep(1/10)
