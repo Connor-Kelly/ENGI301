@@ -1,0 +1,15 @@
+sudo apt-get install alsa-utils libasound2 –y
+
+sudo apt-get install -y swig libpulse-dev libasound2-dev
+
+sudo apt-get update
+
+sudo pip3 install --upgrade Pillow
+
+sudo pip3 install adafruit-circuitpython-busdevice
+
+sudo pip3 install adafruit-circuitpython-rgb-display
+
+sudo apt-get install ttf-dejavu -y
+
+sudo apt-get install moc
