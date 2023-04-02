@@ -21,7 +21,7 @@ class mocp_runner():
         print("Process in state_id: %d | state: %s"%(states[state],state))
         return states[state];
 
-    def mocp_add(self, path = self.music_dir):
+    def mocp_add(self, path = ""):
         if (type(path)!=type("")):
             print("mocp_add | ERROR: nonstring path")
             return -1
