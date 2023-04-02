@@ -33,10 +33,10 @@ class mocp_runner():
             os.system("mocp -p")
         if (state == 1): # the player is playing
             os.system("mocp -G")
-        if (state == 0): # the player is paused
+        if (state == 2): # the player is paused
             os.system("mocp -G")
         state = self.mocp_get_state()
-        print("mocp_toggle: newState: d\n"%state)
+        print("mocp_toggle: newState: %d\n"%state)
         return state
 
     def run(self):
