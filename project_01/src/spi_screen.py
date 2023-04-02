@@ -102,6 +102,8 @@ class SPI_Display():
     cs_pin    = None
     spi_bus   = None
     display   = None
+    cur_image = None
+    cur_selection = None
     
     def __init__(self, clk_pin=board.SCLK, miso_pin=board.MISO, mosi_pin=board.MOSI,
                        cs_pin=board.P1_6, dc_pin=board.P1_4, reset_pin=board.P1_2,
@@ -127,8 +129,12 @@ class SPI_Display():
         self.spi_bus   = busio.SPI(clock=clk_pin, MISO=miso_pin, MOSI=mosi_pin)
 
         # Create the ILI9341 display:
-        self.display   = ili9341.ILI9341(self.spi_bus, cs=self.cs_pin, dc=self.dc_pin,
-                                         baudrate=baudrate, rotation=rotation)
+        self.display   = ili9341.ILI9341(self.spi_bus, cs=self.cs_pin, dc=self.dc_pin, baudrate=baudrate, rotation=rotation)
+        
+        self.d = ili9341.ILI9341(self.spi_bus, cs=self.cs_pin, dc=self.dc_pin, baudrate=baudrate, rotation=rotation)
+        
+        # self.base_box = 
+        self.cur_image = Image.new("RGBA", (320,240), (0,0,0,0))
         
         # Initialize Hardware
         self._setup()
@@ -140,6 +146,8 @@ class SPI_Display():
         """Initialize the display itself"""
         # Clear the display
         self.blank()
+        # clear the cur_image
+        self.cur_image = Image.new("RGBA", (320,240), (0,0,0,0))
 
     # End def    
 
@@ -176,15 +184,15 @@ class SPI_Display():
         return (width, height)
 
     # End def
-
-
+    
     def image(self, filename, rotation=90):
         """Display the image on the screen"""
         # Fill display with black pixels to clear the image
-        self.blank()
+        # self.blank()
 
         # Create image with file name
         image = Image.open(filename)
+        # image = convertImage(image)
 
         # Get screen dimensions
         width, height = self._get_dimensions(rotation)
@@ -211,10 +219,9 @@ class SPI_Display():
         
     # End def
     
-
     def text(self, value, fontsize=24, fontcolor=(255,255,255), 
-                   backgroundcolor=(0,0,0), justify=LEFT, align=TOP, 
-                   rotation=90):
+                  backgroundcolor=(0,0,0), justify=LEFT, align=TOP, 
+                  rotation=90):
         """ Update the display with text
         
         :param value           : Value can be a string or list of string
@@ -325,8 +332,191 @@ class SPI_Display():
 
     # End def
     
-# End class
+    
+    def print_text(self, line, fontsize=24, fontcolor=(255,255,255), 
+                  backgroundcolor=(0,0,0,0), position=(0,0), rotation=90):
+        """ Update the display with text
+        
+        :param value           : Value can be a string or list of string
+        :param fontsize        : Size of font
+        :param fontcolor       : (R, G, B) tuple for the color of the text
+        :param backgroundcolor : (R, G, B) tuple for the color of the background
+        :param justify         : Value in [LEFT, CENTER, RIGHT]
+        :param align           : Value in [TOP, CENTER, BOTTOM]
+        :param rotation        : Orientation of the display
+        
+        Will throw a ValueError 
+        """
+        # Debug variable
+        debug = False
+        
+        # backgroundcolor= (147, 147, 147, 0)
+        
+        # bg = Image.open("slice1.png")
+        # bg = self.scale_image(bg)
+        # Clear screen
+        # self.fill(backgroundcolor)
+        
+        # Get display dimensions
+        width, height = (320, 240)
 
+        # Create a canvas for drawing
+        canvas = Image.new("RGBA", (width, height), backgroundcolor)
+
+        # Get drawing object to draw on canvas
+        draw   = ImageDraw.Draw(canvas)
+
+        # Load a TTF Font
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", fontsize)
+
+        # Get height of a character
+        font_height = font.getsize(" ")[1]
+
+        
+        # Draw the text
+        draw.text((position), line, font=font, fill=fontcolor)
+        # y += font_height
+        
+        self.cur_image.paste(canvas, (0,0), canvas)
+        
+        # Display image
+        self.display.image(self.cur_image)
+
+    # End def
+    
+    def display_playing(self):
+        """ Update the display with text
+        
+        :param value           : Value can be a string or list of string
+        :param fontsize        : Size of font
+        :param fontcolor       : (R, G, B) tuple for the color of the text
+        :param backgroundcolor : (R, G, B) tuple for the color of the background
+        :param justify         : Value in [LEFT, CENTER, RIGHT]
+        :param align           : Value in [TOP, CENTER, BOTTOM]
+        :param rotation        : Orientation of the display
+        
+        Will throw a ValueError 
+        """
+        # Debug variable
+        debug = False
+        
+        # clear the display
+        self.blank()
+        
+        fontsize=24
+        fontcolor=(255,255,255)
+        backgroundcolor=(0,0,0,0)
+        position=(0,0)
+        rotation=90
+        
+        # Get display dimensions
+        width, height = (320, 240)
+        # backgroundcolor= (147, 147, 147, 0)
+        
+        bg = Image.open("slice1.png")
+        bg = self.scale_image(bg)
+        self.cur_image.paste(bg)
+        
+        items = self.get_playing()
+        # print(track);
+        # Clear screen
+        # self.fill(backgroundcolor)
+        
+
+        # Create a canvas for drawing
+        canvas = Image.new("RGBA", (width, height), backgroundcolor)
+
+        # Get drawing object to draw on canvas
+        draw   = ImageDraw.Draw(canvas)
+
+        # Load a TTF Font
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", fontsize)
+
+        # Get height of a character
+        font_height = font.getsize(" ")[1]
+
+        Track = items[0]
+        Artist = items[1]
+        Album = items[2]
+        TimeLeft = items[3]
+        TotalTime = items[4]
+        
+        TrackPosition = (10,40)
+        ArtistPosition = (10,80)
+        AlbumPosition = (10,120)
+        TimeLeftPosition = (10,200)
+        TotalTimePosition = (100,200)
+        # Draw the text
+        self.print_text(Track, position=TrackPosition)
+        self.print_text(Artist, position=ArtistPosition)
+        self.print_text(Album, position=AlbumPosition)
+        self.print_text(TimeLeft, position=TimeLeftPosition)
+        self.print_text(TotalTime, position=TotalTimePosition)
+        # draw.text((TrackPosition), Track, font=font, fill=fontcolor)
+        # draw.text((ArtistPosition), Artist, font=font, fill=fontcolor)
+        # draw.text((AlbumPosition), Album, font=font, fill=fontcolor)
+        # draw.text((TimeLeftPosition), TimeLeft, font=font, fill=fontcolor)
+        # draw.text((TotalTimePosition), TotalTime, font=font, fill=fontcolor)
+
+        # y += font_height
+        
+        # self.cur_image.paste(canvas, (0,0), canvas)
+        
+        # Display image
+        self.display.image(self.cur_image)
+
+# def convertImage(image):
+#     # img = Image.open("./image.png")
+#     img = image
+#     img = img.convert("RGBA")
+ 
+#     datas = img.getdata()
+ 
+#     newData = []
+ 
+#     for item in datas:
+#         if item[0] == 255 and item[1] == 255 and item[2] == 255:
+#             newData.append((255, 255, 255, 0))
+#         else:
+#             newData.append(item)
+ 
+#     img.putdata(newData)
+#     print("finished converting img\n")
+#     return img
+
+
+
+    def scale_image(self, image, rotation=90):
+        # Get screen dimensions
+        width, height = self._get_dimensions(rotation)
+    
+        # Scale the image to the smaller screen dimension
+        image_ratio  = image.width / image.height
+        screen_ratio = width / height
+        if screen_ratio < image_ratio:
+            scaled_width  = image.width * height // image.height
+            scaled_height = height
+        else:
+            scaled_width  = width
+            scaled_height = image.height * width // image.width
+        
+        image = image.resize((scaled_width, scaled_height), Image.BICUBIC)
+    
+        # Crop and center the image
+        x = scaled_width  // 2 - width  // 2
+        y = scaled_height // 2 - height // 2
+        image = image.crop((x, y, x + width, y + height))
+        return image
+    
+    
+    # def display_playing():
+    #     canvas = canvas = Image.new("RGBA", size=(320, 240), color=(0,0,0))
+        
+    def get_playing(self):
+        # returns in form: [Track, Artist, Album]
+        return ["Track", "Artist", "Album", "0:00", "4:00"]
+    
+# End class
 
 # ------------------------------------------------------------------------
 # Main script
@@ -381,3 +571,38 @@ if __name__ == '__main__':
 
 
 
+
+
+    # def image(self, filename, rotation=90):
+    #     """Display the image on the screen"""
+    #     # Fill display with black pixels to clear the image
+    #     self.blank()
+
+    #     # Create image with file name
+    #     image = Image.open(filename)
+
+    #     # Get screen dimensions
+    #     width, height = self._get_dimensions(rotation)
+
+    #     # Scale the image to the smaller screen dimension
+    #     image_ratio  = image.width / image.height
+    #     screen_ratio = width / height
+    #     if screen_ratio < image_ratio:
+    #         scaled_width  = image.width * height // image.height
+    #         scaled_height = height
+    #     else:
+    #         scaled_width  = width
+    #         scaled_height = image.height * width // image.width
+        
+    #     image = image.resize((scaled_width, scaled_height), Image.BICUBIC)
+
+    #     # Crop and center the image
+    #     x = scaled_width  // 2 - width  // 2
+    #     y = scaled_height // 2 - height // 2
+    #     image = image.crop((x, y, x + width, y + height))
+
+    #     # Display image
+    #     self.display.image(image)
+        
+    # # End def
+    
