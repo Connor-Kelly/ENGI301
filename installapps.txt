@@ -15,3 +15,5 @@ sudo apt-get install ttf-dejavu -y
 sudo apt-get install moc
 
 pip3 install adafruit-circuitpython-ili9341
+
+pip3 install rotaryio
