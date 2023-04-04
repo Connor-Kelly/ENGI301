@@ -1,7 +1,10 @@
 """
+Original Code from: 
 Encoder library for Raspberry Pi for measuring quadrature encoded signals.
 created by Mivallion <mivallion@gmail.com>
 Version 1.0 - 01 april 2020 - inital release
+
+Modified by Connor Kelly May 2023 <cjk7@rice.edu>
 """
 
 # import RPi.GPIO as GPIO
