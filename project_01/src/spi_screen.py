@@ -133,7 +133,7 @@ class SPI_Display():
         
         self.d = ili9341.ILI9341(self.spi_bus, cs=self.cs_pin, dc=self.dc_pin, baudrate=baudrate, rotation=rotation)
         
-        # self.base_box = 
+        # initialize image layer
         self.cur_image = Image.new("RGBA", (320,240), (0,0,0,0))
         
         # Initialize Hardware
