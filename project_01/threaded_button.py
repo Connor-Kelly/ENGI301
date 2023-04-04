@@ -171,7 +171,6 @@ class ThreadedButton(threading.Thread):
            Returns:  True  - Button is pressed
                      False - Button is not pressed
         """
-        print("is_pressed: %d\n"%(GPIO.input(self.pin) == self.pressed_value))
         return GPIO.input(self.pin) == self.pressed_value
 
     # End def
@@ -181,16 +180,14 @@ class ThreadedButton(threading.Thread):
         """ Run the button thread.  Execute callbacks as appropriate. """
         function_return_value = None
         button_press_time     = None
-        self.is_pressed()
 
         # Run button monitor until told to stop        
         while(not self.stop_button):  # !!! FIX !!!
         
             # Wait for button press
             #   Execute the unpressed callback function based on the sleep time
-            while(not self.is_pressed()):  # !!! FIX !!!
+            while(not self.is_pressed):  # !!! FIX !!!
             
-                print("not pressed")
                 if self.unpressed_callback is not None:
                     self.unpressed_callback_value = self.unpressed_callback()
                 
@@ -208,7 +205,7 @@ class ThreadedButton(threading.Thread):
             
             # Wait for button release
             #   Execute the pressed callback function based on the sleep time
-            while(self.is_pressed()):  # !!! FIX !!!
+            while(self.is_pressed):  # !!! FIX !!!
             
                 if self.pressed_callback is not None:
                     self.pressed_callback_value = self.pressed_callback()
