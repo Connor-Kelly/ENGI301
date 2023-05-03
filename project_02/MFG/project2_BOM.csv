@@ -1,0 +1,10 @@
+Qty,Value,Device,Package,Parts,Description,DESCRIPTION,MF,MP,PURCHASE-URL
+5,10k,R_R0402,R0402,"R1, R2, R3, R4, R5","RESISTOR, American symbol",,Bournes Inc,,
+6,FIDUCIAL,FIDUCIAL,FIDUCIAL_40MIL,"FUD1, FUD2, FUD3, FUD4, FUD5, FUD6",,,N/A,,
+4,MOUNTING_HOLE,MOUNTING_HOLE,MOUNTING_HOLE,"MGT1, MGT2, MGT3, MGT4",Chassis Mounting Hole w/GND connection ability,,N/A,,
+1,PEC16-4015F-S0024,PEC16-4015F-S0024,PEC16-4015F-S0024,ROT_SELECT,Mechanical Encoder Rotary Incremental Flat 0.02N.m Straight Quadrature Digital Square Wave 24PPR Through Hole PC Pin, Mechanical Encoder Rotary Incremental Flat 0.02N.m Straight Quadrature Digital Square Wave 24PPR Through Hole PC Pin ,Bourns,PEC16-4015F-S0024,https://pricing.snapeda.com/search/part/PEC16-4015F-S0024/?ref=eda
+1,POCKETBEAGLE,POCKETBEAGLE,POCKETBEAGLE,U$3,PocketBeagle is an ultra-tiny-yet-complete open-source USB-key-fob computer.,,BeagleBoard,,
+1,POTENTIOMETER,POTENTIOMETER,POT-PO90S,POT_VOLUME,"10k Ohm 1 Gang Linear Through Hole Potentiometer Detent 1.0 Kierros Conductive Plastic 0.03W, 1/32W PC Pins, Board Locks",,TT Electronics/BI,,
+4,PUSH_BUTTON,PUSH_BUTTON,BUTTON_12.5MM,"BTN_BACK, BTN_ON/OFF, BTN_PLAY/PAUSE, BTN_QUEUE",Momentary Press Button Switch,,Adafruit,,
+1,SCREEN_2.8,SCREEN_2.8,SCREEN_2.8,S1,"SPI Screen, TFT, 2.8in",,Adafruit,,
+1,USB_A_BREAKOUT,USB_A_BREAKOUT,USB_A_BREAKOUT,U$5,USB Breakout Board,,SparkFun,,
